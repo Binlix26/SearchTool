@@ -1,7 +1,4 @@
 # SearchTool
-<h3> 
-  Final Project for Professional Programing Practice course at Wintec.
-</h3>
 
 <p>
   This Java Application is to help you locate the '.txt' files that cotain the information you want, 
