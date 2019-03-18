@@ -1,6 +1,8 @@
 package wintec.itb;
 
 import org.junit.Test;
+import wintec.itb.core.FileInfo;
+import wintec.itb.core.Frequency;
 
 import java.util.List;
 

@@ -1,4 +1,4 @@
-package wintec.itb;
+package wintec.itb.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

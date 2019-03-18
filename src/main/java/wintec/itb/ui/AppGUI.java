@@ -1,4 +1,4 @@
-package wintec.itb;
+package wintec.itb.ui;
 
 import javafx.application.Platform;
 import javafx.geometry.HPos;
@@ -10,6 +10,9 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
+import wintec.itb.core.InvertedIndex;
+import wintec.itb.database.DatabaseConnector;
+import wintec.itb.utility.WordNormalization;
 
 import java.io.File;
 import java.sql.Connection;

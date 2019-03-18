@@ -1,6 +1,7 @@
 package wintec.itb;
 
 import org.junit.Test;
+import wintec.itb.core.InvertedIndex;
 
 import java.io.File;
 import java.util.TreeMap;

@@ -1,4 +1,4 @@
-package wintec.itb;
+package wintec.itb.utility;
 
 /**
  * Created by binlix26 on 28/03/17.

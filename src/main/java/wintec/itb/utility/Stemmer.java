@@ -1,4 +1,4 @@
-package wintec.itb;
+package wintec.itb.utility;
 
 /**
  * Stemmer, implementing the Porter Stemming Algorithm

@@ -1,4 +1,6 @@
-package wintec.itb;
+package wintec.itb.core;
+
+import wintec.itb.utility.WordNormalization;
 
 import java.io.BufferedReader;
 import java.io.File;
