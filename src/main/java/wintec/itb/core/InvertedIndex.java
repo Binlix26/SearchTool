@@ -17,10 +17,16 @@ import java.util.*;
  */
 public class InvertedIndex {
 
-    private int numForFileID = 1;
-    private TreeMap<Integer, File> indexToFiles = new TreeMap<>();
-    private Map<String, Frequency> invertedMap = new HashMap<>();
+    private int numForFileID;
+    private TreeMap<Integer, File> indexToFiles;
+    private Map<String, Frequency> invertedMap;
     private HashMap<Integer, String> indexToWantedWords;
+
+    public InvertedIndex() {
+        this.numForFileID = 1;
+        this.indexToFiles = new TreeMap<>();
+        this.invertedMap = new HashMap<>();
+    }
 
     // receive the chosen directory
     // to help with the recursion fileFinder()
@@ -46,7 +52,6 @@ public class InvertedIndex {
             storeWordByFileID(fileIDs, key);
             return fileIDs;
         }
-
         // not found this term occurs in all the files under the chosen directory
         return null;
     }
@@ -54,7 +59,6 @@ public class InvertedIndex {
     //get values by synonym keys
     public int[] getSynonymFilesID(String synonyms) {
         String[] terms = synonyms.split(",");
-
         Set<Integer> set = new HashSet<>();
 
         for (int i = 0; i < terms.length; i++) {
@@ -75,20 +79,19 @@ public class InvertedIndex {
                 set) {
             result[index++] = id;
         }
-
         return result;
     }
 
     // show the current inverted index for the chosen directory
     public void displayInvertedIndex() {
         for (Map.Entry<String, Frequency> entry : invertedMap.entrySet()
-                ) {
+        ) {
             Frequency fre = entry.getValue();
             List<FileInfo> posting = fre.getPosting();
 
             System.out.print(entry.getKey() + "\t" + fre.getFrequency() + " -> ");
             for (FileInfo node : posting
-                    ) {
+            ) {
                 System.out.print("[ " + node.getFileID() +
                         ", " + node.getOccurrence() + ":" + node.getPositions().toString() + "], ");
             }
@@ -129,16 +132,15 @@ public class InvertedIndex {
         return indexToFiles;
     }
 
-    public Map<String, Frequency> getInvertedMap() {
-        return invertedMap;
-    }
-
-    public HashMap<Integer, String> getIndexToWantedWords() {
-        return indexToWantedWords;
-    }
-
     public boolean isEmpty() {
         return this.invertedMap.isEmpty();
+    }
+
+    public void reset() {
+        this.numForFileID = 1;
+        this.indexToFiles = new TreeMap<>();
+        this.invertedMap = new HashMap<>();
+        this.indexToWantedWords = new HashMap<>();
     }
 
     // find all the files under the chosen directory
@@ -171,15 +173,13 @@ public class InvertedIndex {
 
     // make inverted index
     private void indexFile(File file) throws IOException {
-
         BufferedReader reader = new BufferedReader(new FileReader(file));
         int pos = 0;
 
         // read through the file
         for (String line = reader.readLine(); line != null; line = reader.readLine()) {
-
             for (String word : line.split("\\W+") // split line into words array
-                    ) {
+            ) {
                 // normalize the term
                 String term = WordNormalization.normalize(word.toLowerCase());
                 pos++; // move position by one
@@ -192,14 +192,12 @@ public class InvertedIndex {
                     invertedMap.put(term, fre);
 
                 }
-
                 fre.addPosition(numForFileID, pos);
             }
         }
     }
 
     private void storeWordByFileID(@NotNull int[] fileIDs, String term) {
-
         for (int id :
                 fileIDs) {
             String value = indexToWantedWords.get(id);
@@ -219,6 +217,5 @@ public class InvertedIndex {
                 indexToWantedWords.put(id, term);
             }
         }
-
     }
 }

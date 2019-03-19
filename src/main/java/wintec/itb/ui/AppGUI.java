@@ -1,6 +1,5 @@
 package wintec.itb.ui;
 
-import javafx.application.Platform;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -8,13 +7,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.stage.DirectoryChooser;
 import javafx.stage.Stage;
 import wintec.itb.core.InvertedIndex;
 import wintec.itb.database.DatabaseConnector;
 import wintec.itb.utility.WordNormalization;
 
-import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -30,18 +27,47 @@ import java.util.*;
  */
 public class AppGUI extends Pane {
 
-    private TextField queryInput;
+    // TODO get rid of this
+    private TextField queryInput = null;
     private TextArea taResult;
-    private Label lblStatus;
+
     private InvertedIndex invertedIndex;
     private Connection conn;
     private boolean isSynonymEnable = false;
 
-    public AppGUI() {
+    private UIService uiService = UIService.getInstance();
 
+    public AppGUI() {
+        this.invertedIndex = new InvertedIndex();
         // assembling each part of the UI
-        HBox topArea = getTopArea();
-        HBox bottomArea = getBottomArea();
+        assembling();
+
+        // never block the main thread from listening the event from users
+        new Thread(() -> {
+            try {
+                conn = new DatabaseConnector().initDB();
+
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }).start();
+    }
+
+    private void assembling() {
+        // TODO event binding
+        TopHolder topHolder = new TopHolder();
+        topHolder.bindWidthProperty(this, 1.5);
+        HBox topArea = topHolder.getPane();
+
+        BottomHolder bottomHolder = new BottomHolder();
+        bottomHolder.bindWithProperty(this, 1.5);
+        Button btBrowser = bottomHolder.getBtBrowser();
+        Label lblStatus = bottomHolder.getLblStatus();
+        btBrowser.setOnAction(event -> uiService.handleBrowse(invertedIndex, lblStatus));
+        HBox bottomArea = bottomHolder.getPane();
+
         VBox rightArea = getRightArea();
 
         //pane to hold everything
@@ -63,47 +89,6 @@ public class AppGUI extends Pane {
         mainPane.prefHeightProperty().bind(this.heightProperty());
 
         this.getChildren().add(mainPane);
-
-        // never block the main thread from listening the event from users
-        new Thread(() -> {
-            try {
-                conn = new DatabaseConnector().initDB();
-
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }).start();
-    }
-
-    private void handleBrowse() {
-        DirectoryChooser dirChooser = new DirectoryChooser();
-
-        File dir = dirChooser.showDialog(null);
-
-        if (dir != null) {
-            String status = dir.getAbsolutePath();
-
-            // make sure the inverted index only contains the file under the current directory
-            // clear the records for previously chosen directory
-            // never affects the main Thread responding the UI event
-            new Thread(() -> {
-
-                invertedIndex = new InvertedIndex();
-
-                // get inverted index for the files under the chosen directory
-                invertedIndex.getFilesForInvertedIndex(dir);
-
-                Platform.runLater(() -> {
-                    lblStatus.setText(status);
-                });
-
-                invertedIndex.displayInvertedIndex();
-                invertedIndex.displayFileMap();
-            }).start();
-
-        }
     }
 
     private void handleSearch() throws SQLException {
@@ -307,45 +292,6 @@ public class AppGUI extends Pane {
         taResult.setText(stringBuilder.toString());
     }
 
-    private HBox getTopArea() {
-        queryInput = new TextField();
-        Button btSearch = new Button("Search");
-
-        HBox pane = new HBox(20);
-        pane.getChildren().addAll(queryInput, btSearch);
-        pane.setPadding(new Insets(5, 5, 5, 10));
-        HBox.setMargin(btSearch, new Insets(0, 0, 0, 20));
-
-        queryInput.prefWidthProperty().bind(this.widthProperty().divide(1.5));
-        btSearch.setOnAction(event -> {
-            try {
-                handleSearch();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-
-        return pane;
-    }
-
-    private HBox getBottomArea() {
-        Button btBrowser = new Button("Browser");
-        lblStatus = new Label();
-
-        // default information
-        lblStatus.setText("No directory is selected.");
-
-        HBox pane = new HBox(20);
-        pane.getChildren().addAll(lblStatus, btBrowser);
-        pane.setPadding(new Insets(5, 5, 5, 10));
-        HBox.setMargin(btBrowser, new Insets(0, 0, 0, 20));
-
-        lblStatus.prefWidthProperty().bind(this.widthProperty().divide(1.5));
-        btBrowser.setOnAction(event -> handleBrowse());
-
-        return pane;
-    }
-
     private VBox getRightArea() {
         VBox pane = new VBox(15);
 
@@ -433,8 +379,7 @@ public class AppGUI extends Pane {
                     lblPrompt.setText("Update Successful!");
                     tfKeyWord.setText("");
                     tfSynonym.setText("");
-                }
-                else
+                } else
                     lblPrompt.setText("Failed, Try again!");
 
             });
