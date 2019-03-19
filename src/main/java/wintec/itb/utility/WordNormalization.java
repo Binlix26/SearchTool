@@ -1,9 +1,8 @@
 package wintec.itb.utility;
 
 /**
- * Created by binlix26 on 28/03/17.
  *
- * This code snippet uses singleton design pattern to provide the normalize()
+ * Provide the normalize()
  * function for everyone who will be invoking it to conduct a word normalization.
  */
 public class WordNormalization {

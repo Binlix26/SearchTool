@@ -5,7 +5,6 @@ import java.sql.DriverManager;
 import java.sql.SQLException;
 
 /**
- * Created by binlix26 on 30/03/17.
  *
  * The purpose of this code snippet is to connect to my local MySQL database.
  */

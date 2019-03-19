@@ -6,6 +6,11 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 
+/**
+ *
+ * The Bottom area of the application UI,
+ * Contains a label and a button
+ */
 public class BottomHolder {
     private Label lblStatus;
     private Button btBrowser;
@@ -22,21 +27,20 @@ public class BottomHolder {
         pane.getChildren().addAll(lblStatus, btBrowser);
         pane.setPadding(new Insets(5, 5, 5, 10));
         HBox.setMargin(btBrowser, new Insets(0, 0, 0, 20));
-
-
-//        btBrowser.setOnAction(event -> handleBrowse());
     }
 
-    public void bindWithProperty(Pane board, double metric) {
-        lblStatus.prefWidthProperty().bind(board.widthProperty().divide(metric));
+    /**
+     * Sets the base URL of the server.
+     *
+     * @param pane The main pane that holds the application UI.
+     * @param divisor The divisor used to dynamically calculate the width of the label.
+     */
+    public void bindWithProperty(Pane pane, double divisor) {
+        lblStatus.prefWidthProperty().bind(pane.widthProperty().divide(divisor));
     }
 
     public Label getLblStatus() {
         return lblStatus;
-    }
-
-    public void setLblStatus(Label lblStatus) {
-        this.lblStatus = lblStatus;
     }
 
     public HBox getPane() {

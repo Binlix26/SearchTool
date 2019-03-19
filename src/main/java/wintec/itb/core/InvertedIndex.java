@@ -10,8 +10,7 @@ import java.io.IOException;
 import java.util.*;
 
 /**
- * Created by binlix26 on 25/03/17.
- * <p>
+ *
  * This class contains every information about how the
  * inverted index is defined for this search tool.
  */

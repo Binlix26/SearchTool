@@ -5,7 +5,6 @@ import java.util.List;
 
 
 /**
- * Created by binlix26 on 25/03/17.
  *
  * The very class that holds the posting list for the inverted index
  * for this application.
