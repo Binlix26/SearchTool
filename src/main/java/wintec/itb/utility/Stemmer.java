@@ -2,6 +2,7 @@ package wintec.itb.utility;
 
 /**
  * Stemmer, implementing the Porter Stemming Algorithm
+ * This implementation is found on https://tartarus.org/martin/PorterStemmer
  * <p>
  * The Stemmer class transforms a word into its root form.  The input
  * word can be provided a character at time (by calling add()), or at once

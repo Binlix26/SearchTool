@@ -1,5 +1,6 @@
 package wintec.itb.core;
 
+import org.jetbrains.annotations.NotNull;
 import wintec.itb.utility.WordNormalization;
 
 import java.io.BufferedReader;
@@ -197,7 +198,7 @@ public class InvertedIndex {
         }
     }
 
-    private void storeWordByFileID(int[] fileIDs, String term) {
+    private void storeWordByFileID(@NotNull int[] fileIDs, String term) {
 
         for (int id :
                 fileIDs) {

@@ -19,6 +19,7 @@ Can be downloaded and run directly without any local dababase, just make sure ch
 </ul>
 
 <h3>Structure of Inverted Index</h3>
+<p>The inverted index will be printed in the console after it is created.</p>
 <p>
 do	3 -> [ 1, 2:[2, 10]], [ 3, 3:[6, 8, 10]], [ 4, 3:[1, 2, 3]]
 </p>
